@@ -1,0 +1,1 @@
+export const SALT_FACTOR=10;
