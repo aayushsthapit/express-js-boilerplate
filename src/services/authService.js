@@ -17,9 +17,20 @@ export async function signup(request)
   return new User({name, email, password:hashedPassword}).save();
 }
 
-export function login(request)
+export function login(request,res)
 {
   let password=request.password;
-  let username=request.username;
+  let name=request.name;
   // compareHash()
+  return new User({name}).fetch().then(user=>{
+    if (!user){
+      throw ({id:'NO user found'})
+    }
+    console.log("INN",user.get("password"))
+    return user
+  })
+  .catch(err=>{
+    console.log("SHIT",err)
+    throw err
+  })
 }

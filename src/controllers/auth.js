@@ -9,5 +9,11 @@ router.post("/signup",function (req,res,next){
   .catch(err=>res.json(err))
 })
 
+router.get("/login",function(req,res,next){
+  return AuthService.login(req.headers,res)
+  .then(data=>{res.status(HttpStatus.OK).json({test:'YAY'})})
+  .catch(err=>res.json({error:err}))
+})
+
 
 export default router;
