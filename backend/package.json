@@ -1,7 +1,7 @@
 {
-  "name": "aayush-ratna-sthapit",
+  "name": "the-curio-project",
   "version": "1.0.0",
-  "description": "start-kit",
+  "description": "A CMS panel for inventory management.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
