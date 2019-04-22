@@ -11,9 +11,19 @@ router.post("/signup",function (req,res,next){
 
 router.get("/login",function(req,res,next){
   return AuthService.login(req.headers,res)
-  .then(data=>{res.status(HttpStatus.OK).json({test:'YAY'})})
+  .then(data=>{res.status(HttpStatus.OK).json({data})})
   .catch(err=>res.json({error:err}))
 })
 
+router.get("/refresh",function(req,res,next){
+  return AuthService.refresh(req.headers,res)
+  .then(data=>{res.status(HttpStatus.OK).json({data})})
+  .catch(err=>res.json({error:err}))
+})
 
+router.get("/signout",function(req,res,next){
+  return AuthService.signout(req.headers)
+  .then(data=>{res.status(HttpStatus.OK).json({data})})
+  .catch(err=>res.json({error:err}))
+})
 export default router;
