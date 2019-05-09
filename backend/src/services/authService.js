@@ -9,6 +9,8 @@ import RefreshToken from '../models/refreshToken'
 import {generateTokens,generateAccessToken} from './tokenGenerator'
 import {checkRefreshTokenValidity} from '../validators/auth'
 
+import HttpStatus from 'http-status-codes'
+
 export async function signup(request)
 {
   let salt= await generateSalt()
@@ -26,7 +28,9 @@ export function login(request,res)
     // compareHash()
     return new User({name}).fetch().then(user=>{
       if (!user){
-        throw ({id:'NO user found'})
+        let err=new Error('Not signed up with this email.')
+        err.statusCode=HttpStatus.NOT_FOUND
+        throw err
       }
       let name=user.get('name');
       let id=user.get('id')

@@ -10,9 +10,10 @@ router.post("/signup",function (req,res,next){
 })
 
 router.get("/login",function(req,res,next){
+  console.log("INN")
   return AuthService.login(req.headers,res)
   .then(data=>{res.status(HttpStatus.OK).json({data})})
-  .catch(err=>res.json({error:err}))
+  .catch(err=>{next(err)})
 })
 
 router.get("/refresh",function(req,res,next){
