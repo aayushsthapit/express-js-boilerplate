@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Routes from './routes'
+import {Provider} from 'react-redux';
+import store from './store';
+import Routes from './routes';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <Routes/>
-      </div>
-      
+      <Provider store={store}>
+        <Routes />
+      </Provider>
     );
   }
 }

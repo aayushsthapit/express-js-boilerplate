@@ -9,6 +9,8 @@ import RefreshToken from '../models/refreshToken'
 import {generateTokens,generateAccessToken} from './tokenGenerator'
 import {checkRefreshTokenValidity} from '../validators/auth'
 
+import HttpStatus from 'http-status-codes'
+
 export async function signup(request)
 {
   let salt= await generateSalt()
@@ -26,7 +28,9 @@ export function login(request,res)
     // compareHash()
     return new User({name}).fetch().then(user=>{
       if (!user){
-        throw ({id:'NO user found'})
+        let err=new Error('Either the username or the password is not correct.')
+        err.statusCode=HttpStatus.NOT_FOUND
+        throw err
       }
       let name=user.get('name');
       let id=user.get('id')
@@ -39,7 +43,7 @@ export function login(request,res)
             .fetch()
             .then(user=>{
               if(!user){
-                let tokens=generateTokens({name,id})
+                let tokens={...generateTokens({name,id}),userId:id}
                 return new RefreshToken({id,tokens:tokens.refreshToken}).save(null,{method:'insert'})
                 .then(res=>tokens)
                 .catch(err=>{throw err})
