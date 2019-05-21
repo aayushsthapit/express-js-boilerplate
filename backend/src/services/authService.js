@@ -28,7 +28,7 @@ export function login(request,res)
     // compareHash()
     return new User({name}).fetch().then(user=>{
       if (!user){
-        let err=new Error('Not signed up with this email.')
+        let err=new Error('Either the username or the password is not correct.')
         err.statusCode=HttpStatus.NOT_FOUND
         throw err
       }
@@ -43,7 +43,7 @@ export function login(request,res)
             .fetch()
             .then(user=>{
               if(!user){
-                let tokens=generateTokens({name,id})
+                let tokens={...generateTokens({name,id}),userId:id}
                 return new RefreshToken({id,tokens:tokens.refreshToken}).save(null,{method:'insert'})
                 .then(res=>tokens)
                 .catch(err=>{throw err})

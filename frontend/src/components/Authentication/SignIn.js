@@ -14,6 +14,10 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 import * as authService from '../../services/authService';
 import Swal from 'sweetalert2';
+import {extractErrorMessageFromResponse} from '../../utils/errorMessageExtractor'
+import {connect} from 'react-redux';
+import store from '../../store';
+import {storeUserCredentials} from '../../actions/authActions';
 
 const styles = theme => ({
   main: {
@@ -48,6 +52,10 @@ const styles = theme => ({
   },
 });
 
+// const mapDispatchToProps=dispatch=>{
+//   return (userCredentials)=>dispatch(s)
+// }
+
 class SignIn extends Component{
   constructor(){
     super()
@@ -68,10 +76,24 @@ class SignIn extends Component{
 
   submitForm(){
     authService.signIn(this.state.email,this.state.password)
-    .then(data=>{
-      console.log("INN",data)
-      Swal.fire('Hello world!')})
-    .catch(error=>{Swal.fire('Oops...', error.response.data.error.data, 'error')})
+    .then(response=>{
+      
+      //Store to local storage
+      let responseData=response.data.data
+      let accessToken=responseData.accessToken
+      let refreshToken=responseData.refreshToken
+      let userId=responseData.userId
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('refreshToken', refreshToken)
+      localStorage.setItem('userId', userId)
+      //Store the user credentials to redux.
+      this.props.dispatch(storeUserCredentials({userId}))
+      
+    })
+    .catch(error=>{
+      let errorMsg = extractErrorMessageFromResponse(error)
+      Swal.fire('Oops...', errorMsg, 'error')
+    })
   }
 
   render(){
@@ -124,4 +146,8 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+export default connect(store => {
+  return {
+    tooltip: '',
+  };
+})(withStyles(styles)(SignIn));
