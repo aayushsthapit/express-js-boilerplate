@@ -4,13 +4,14 @@ import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 // Authentication
 import SignIn from './components/Authentication/SignIn';
 import AdminPage from './components/common/AdminPage'
+import {PrivateRoute,DefaultRoute} from './PrivateRoute'
 
 const Routes = () => {
   return (
     <Router>
-        <Route exact path='/' component={SignIn}/>
+        <DefaultRoute exact path='/'/>
         <Route path="/signin" component={SignIn} />
-        <Route path="/admin" component={AdminPage}/>
+        <PrivateRoute path="/admin" component={AdminPage}/>
     </Router>
   );
 };
