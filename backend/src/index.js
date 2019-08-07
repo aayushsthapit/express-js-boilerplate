@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import * as errorHandler from './middlewares/errorHandler';
 
 dotenv.config()
-console.log(__dirname)
 var app = express()
 var port = process.env.APP_PORT || 3000;
 
